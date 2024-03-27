@@ -80,6 +80,9 @@ a {
         if (event.ctrlKey && event.key === 's') {
           event.preventDefault(); // Prevent default browser save action
           saveAsPlainTextFile(textarea.value);
+        } else if (event.ctrlKey && event.key === 'o') {
+          event.preventDefault(); // Prevent default browser open action
+          openTextFile();
         }
       });
 
@@ -125,15 +128,39 @@ a {
         localStorage.setItem('editorText', text);
       }
 
+      const d = new Date();
+      var thisDay = d.getFullYear() % 100 + "" + ((d.getMonth() <10) ? "0" + d.getMonth() : d.getMonth()) + "" + ((d.getDate() <10) ? "0" + d.getDate() : d.getDate())  + "-.txt";
+
       function saveAsPlainTextFile(text) {
         var blob = new Blob([text], { type: 'text/plain' });
         var a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'text_file.txt';
+        a.download = thisDay;
         a.style.display = 'none';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
+      }
+
+      function openTextFile() {
+        var input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = function(event) {
+          var file = event.target.files[0];
+          var reader = new FileReader();
+
+          reader.onload = function() {
+            textarea.value = reader.result;
+            syncLineNumbers(); // Update line numbers after opening the file
+            countWords(); // Update word count after opening the file
+            saveToLocalStorage(textarea.value); // Save changes to local storage
+          };
+
+          reader.readAsText(file);
+        };
+
+        input.click();
       }
     };
   </script>
