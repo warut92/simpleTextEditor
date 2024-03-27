@@ -1,0 +1,15 @@
+{
+  "name": "Simple Text Editor",
+  "short_name": "Simple Text Editor",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#fff",
+  "description": "Simple Text Editor for personal use",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    }
+  ]
+}
