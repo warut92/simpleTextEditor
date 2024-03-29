@@ -10,8 +10,8 @@
   <style>
     body,
     * {
-      font-family: ;
-      font-size: 30px;
+      font-family: consolas;
+      font-size: 25px;
     }
 
     #editor {
@@ -21,7 +21,7 @@
     #lineNumbers {
       width: 50px;
       text-align: right;
-      padding-top: 0px;
+      padding-top: 7px;
       padding-right: 20px;
       border-right: 2px solid #ccc;
       user-select: none;
@@ -93,6 +93,8 @@
           syncLineNumbers();
           saveToLocalStorage(textarea.value);
           countWords()
+
+console.log("yo");
         });
 
         function addRowTextarea() {
@@ -104,28 +106,25 @@
 
         textarea.addEventListener('keydown', function(event) {
           if (event.ctrlKey && event.key === 's') {
-            event.preventDefault(); // Prevent default browser save action
+            event.preventDefault();
             saveAsPlainTextFile(textarea.value);
           } else if (event.ctrlKey && event.key === 'o') {
-            event.preventDefault(); // Prevent default browser open action
+            event.preventDefault();
             openTextFile();
           }
         });
 
         function countWords() {
-          var text = textarea.value.trim();
-          var words = text.split(/\s+/).filter(function(word) {
-            return word.length > 0;
-          });
-          wordCountSpan.textContent = words.length;
+          const segmenterTh = new Intl.Segmenter('th', { granularity: 'word' });
+          var words = [...segmenterTh.segment(textarea.value)].filter((segment) => segment.isWordLike).length
+          wordCountSpan.innerHTML = words ;
         }
 
-        // Load text from local storage on page load
         var savedText = localStorage.getItem('editorText');
         if (savedText) {
           textarea.value = savedText;
         }
-        syncLineNumbers(); // Sync line numbers on page load
+        syncLineNumbers();
         countWords()
 
         function syncLineNumbers() {
@@ -138,13 +137,6 @@
           lineNumbers.innerHTML = lineNumbersContent;
         }
 
-        function countWords() {
-          var text = textarea.value.trim();
-          var words = text.split(/\s+/).filter(function(word) {
-            return word.length > 0;
-          });
-          wordCountSpan.textContent = words.length;
-        }
 
         function saveToLocalStorage(text) {
           localStorage.setItem('editorText', text);
@@ -153,7 +145,7 @@
         const d = new Date();
         var thisDay = d.getFullYear() % 100 + "" + ((d.getMonth() < 10) ? "0" + d.getMonth() : d.getMonth()) + "" + ((d.getDate() < 10) ? "0" + d.getDate() : d.getDate()) + "-.txt";
 
-        var time = d.getFullYear() % 100 + "" + ((d.getMonth() < 10) ? "0" + d.getMonth() : d.getMonth()) + "" + ((d.getDate() < 10) ? "0" + d.getDate() : d.getDate()) + "/" + d.getHours() + ":" + d.getMinutes();
+        var time = d.getFullYear() % 100 + "" + ((d.getMonth() < 10) ? "0" + d.getMonth() : d.getMonth()) + "" + ((d.getDate() < 10) ? "0" + d.getDate() : d.getDate()) + "/" + ((d.getHours() < 10) ? "0" + d.getHours() : d.getHours()) + ":" + ((d.getMinutes() < 10) ? "0" + d.getMinutes() : d.getMinutes());
 
         function saveAsPlainTextFile(text) {
           var blob = new Blob([text + "\n" + time], {
@@ -167,7 +159,6 @@
           a.click();
           document.body.removeChild(a);
         }
-        console.log(textarea.value + "\n\n\n" + time);
 
         function openTextFile() {
           var input = document.createElement('input');
