@@ -1,0 +1,64 @@
+@import 'https://cdn.jsdelivr.net/gh/lazywasabi/thai-web-fonts@7/fonts/TlwgTypist/TlwgTypist.css';
+  body,
+  * {
+    font-family: 'Tlwg Typist', monospace;
+    font-size: 25px;
+  }
+
+  #editor {
+    display: flex;
+  }
+
+  #lineNumbers {
+    width: 50px;
+    text-align: right;
+    padding-top: 7px;
+    padding-right: 20px;
+    border-right: 2px solid #ccc;
+    user-select: none;
+  }
+
+  #textarea {
+    flex-grow: 1;
+    border: none;
+    padding: 5px;
+    resize: none;
+    overflow: none;
+  }
+
+  #textarea:focus {
+    outline: none !important;
+  }
+
+  #wordCount {
+    font-size: 30px;
+    position: -webkit-sticky;
+    position: sticky;
+    position: fixed;
+    bottom: 0;
+    right: 16px;
+    padding: 1px;
+  }
+
+  body {
+    color: #222;
+    background: #fff;
+    font: 100% system-ui;
+  }
+
+  a {
+    color: #0033cc;
+  }
+
+  @media (prefers-color-scheme: dark) {
+
+    body,
+    textarea {
+      color: #eee;
+      background: #121212;
+    }
+
+    body a {
+      color: #809fff;
+    }
+  }
