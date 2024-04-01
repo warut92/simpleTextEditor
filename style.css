@@ -23,7 +23,7 @@
     border: none;
     padding: 5px;
     resize: none;
-    overflow: none;
+    overflow: hidden;
   }
 
   #textarea:focus {
@@ -38,6 +38,33 @@
     bottom: 0;
     right: 16px;
     padding: 1px;
+  }
+
+  #terminal {
+    font-size: 25px;
+    color: white;
+    border: none;
+    position: -webkit-sticky;
+    position: sticky;
+    position: fixed;
+    bottom: 10px;
+    left: 0;
+    padding: 1px;
+    background-color: #121212;
+  }
+
+  #msgterminal {
+    font-size: 25px;
+    color: white;
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    padding: 1px;
+    background-color: #121212;
+  }
+
+  #terminal:focus {
+    outline: none !important;
   }
 
   body {
