@@ -31,7 +31,7 @@
   }
 
   #wordCount {
-    font-size: 30px;
+    font-size: 20px;
     position: -webkit-sticky;
     position: sticky;
     position: fixed;
@@ -41,6 +41,7 @@
   }
 
   #terminal {
+    font-family: Consolas;
     font-size: 25px;
     color: white;
     border: none;

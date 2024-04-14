@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Move Text Up</title>
+    <style>
+        textarea {
+            width: 300px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="textArea" rows="10"></textarea>
+    <script>
+        function moveTextUp() {
+            var textArea = document.getElementById("textArea");
+            var lines = textArea.value.split("\n");
+            var cursorPos = textArea.selectionStart;
+            if (cursorPos === 0) {
+                return; // Cursor is already at the top, no need to move up
+            }
+            var currentLine = lines[Math.floor(cursorPos / textArea.cols)];
+            var prevLine = lines[Math.floor((cursorPos - textArea.cols) / textArea.cols)];
+            if (prevLine) {
+                var updatedText = textArea.value.substring(0, cursorPos - textArea.cols) +
+                    currentLine + "\n" + prevLine +
+                    textArea.value.substring(cursorPos);
+                textArea.value = updatedText;
+                textArea.selectionStart = cursorPos - textArea.cols;
+                textArea.selectionEnd = cursorPos - textArea.cols;
+            }
+        }
+
+        document.addEventListener("keydown", function (event) {
+            if (event.key === "ArrowUp" && event.ctrlKey) {
+                event.preventDefault(); // Prevent default behavior of arrow key
+                moveTextUp();
+            }
+        });
+    </script>
+</body>
+</html>

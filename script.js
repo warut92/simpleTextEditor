@@ -5,7 +5,7 @@ window.onload = function() {
   var terminal = document.getElementById('terminal');
   var msgterminal = document.getElementById('msgterminal');
   addRowTextarea()
-  
+
   textarea.addEventListener('input', function() {
     syncLineNumbers();
     saveToLocalStorage(textarea.value);
@@ -16,16 +16,6 @@ window.onload = function() {
     var lines = document.getElementById("textarea").value.split(/\r\n|\r|\n/).length;
     document.getElementById("textarea").rows = lines;
   }
-
-  document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.key === 's') {
-      event.preventDefault();
-      saveAsPlainTextFile(textarea.value);
-    } else if (event.ctrlKey && event.key === 'o') {
-      event.preventDefault();
-      openTextFile();
-    }
-  });
 
   function countWords() {
     const segmenterTh = new Intl.Segmenter('th', { granularity: 'word' });
@@ -40,6 +30,7 @@ window.onload = function() {
   syncLineNumbers();
   countWords()
 
+//split value from textarea
   function syncLineNumbers() {
     var lines = textarea.value.split('\n').length;
     var lineNumbersContent = '';
@@ -49,6 +40,49 @@ window.onload = function() {
     lineNumbers.innerHTML = lineNumbersContent;
   }
 
+  textarea.addEventListener('keydown', function(event) {
+       // Check if Ctrl (or Command on Mac) + L is pressed
+       if ((event.ctrlKey || event.metaKey) && event.key === 'l') {
+           event.preventDefault(); // Prevent default behavior (e.g., opening "Find" dialog)
+
+           const startPos = textarea.selectionStart;
+           const endPos = textarea.selectionEnd;
+           console.log('ENDPOS', endPos)
+
+           // Find the start of the current line
+           let lineStart = startPos;
+           while (lineStart > 0 && textarea.value[lineStart - 1] !== '\n') {
+               lineStart--;
+           }
+
+           // Find the end of the current line
+           let lineEnd = endPos;
+           while (lineEnd < textarea.value.length && textarea.value[lineEnd] !== '\n') {
+               lineEnd++;
+           }
+
+           // Select the current line
+           textarea.setSelectionRange(lineStart, lineEnd);
+       }
+   });
+
+   textarea.addEventListener('keydown', function(event) {
+        let lineNum = textarea.value.split("\n")
+        //หา index ของ cuser ว่า active อยู่ line ใด
+        //หา length ของทั้งหมด
+        //หาตำแหน่งของ \n ว่าอยู่ตำแหน่งใดบ้าง
+        console.log(textarea.value.match(new RegExp("\n", "g")).length);
+
+        //เปลี่ยน index ของอาร์เรย์
+
+        //รันเมื่อกด Ctrl + ArrowUp ^
+        if ((event.ctrlKey || event.metaKey) && event.key === 'ArrowUp') {
+            event.preventDefault();
+            console.log(lineNum);
+
+        }
+    });
+
   function saveToLocalStorage(text) {
     localStorage.setItem('editorText', text);
   }
@@ -57,9 +91,14 @@ window.onload = function() {
     if (event.key === "Escape") {
       msgterminal.innerHTML = ""
       terminal.focus()
-      }
+    } else if (event.key === "Tab") {
+      event.preventDefault()
+      msgterminal.innerHTML = ""
+      textarea.focus()
+    }
   });
 
+//terminal messege
   terminal.addEventListener('keypress', function(event) {
     if (event.key === "Enter") {
       if (terminal.value === "s") {
@@ -70,9 +109,16 @@ window.onload = function() {
         msgterminal.innerHTML = "file opening..."
         terminal.value = ""
         openTextFile();
-      } else {
-        msgterminal.innerHTML = terminal.value + " : not found"
+      } else if (terminal.value === "h") {
+        msgterminal.innerHTML = "Txteditor in your browser<br>**************************<br>o -- open file<br>s -- save file<br>h -- help messege<br>**************************<br>shortcut-key<br>Ctrl+l select content in current line<br>Esc focus the command input/clear messege"
         terminal.value = ""
+      } else {
+        if (terminal.value !== "") {
+          msgterminal.innerHTML = terminal.value + " : not found"
+          terminal.value = ""
+        } else {
+          msgterminal.innerHTML = terminal.value + "type for \"h\" help messege"
+        }
       }
     }
   });
